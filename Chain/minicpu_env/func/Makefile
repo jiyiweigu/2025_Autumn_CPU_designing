@@ -1,0 +1,48 @@
+obj_path = ./obj
+
+default:
+	make all
+	# make tidy
+
+all:
+	mkdir -p ${obj_path}
+	make ${obj_path}/test.coe ${obj_path}/test.s
+
+tidy:
+	rm -f ${obj_path}/convert ${obj_path}/test.bin ${obj_path}/test.data ${obj_path}/test.elf
+	rm -f ${obj_path}/test.s ${obj_path}/test.o
+
+${obj_path}/test.s: ${obj_path}/test.elf
+	loongarch32r-linux-gnusf-objdump -alD ${obj_path}/test.elf > ${obj_path}/test.s
+
+${obj_path}/test.o: test.S
+	@mkdir -p ${obj_path}
+	loongarch32r-linux-gnusf-as -mabi=ilp32 test.S -o ${obj_path}/test.o
+
+${obj_path}/test.elf: ${obj_path}/test.o
+	loongarch32r-linux-gnusf-ld ${obj_path}/test.o -T gun/bin.lds -o ${obj_path}/test.elf
+
+${obj_path}/test.bin: ${obj_path}/test.elf
+	loongarch32r-linux-gnusf-objcopy -O binary -j .text ${obj_path}/test.elf ${obj_path}/test.bin
+
+${obj_path}/test.data: ${obj_path}/test.elf
+	loongarch32r-linux-gnusf-objcopy -O binary -j .data ${obj_path}/test.elf ${obj_path}/test.data
+
+${obj_path}/convert: convert.c
+	gcc convert.c -o ${obj_path}/convert
+
+${obj_path}/test.coe ${obj_path}/test.mif: ${obj_path}/test.bin ${obj_path}/test.data ${obj_path}/convert
+	cd ${obj_path} && ./convert test.bin test.coe
+
+clean:
+	rm -rf obj
+
+help:
+	@echo "################################################################"
+	@echo "### help for compiling testbench test.S"
+	@echo "################################################################"
+	@echo "### options:"
+	@echo "###     make      : get compiled result, which is saved in ./obj"
+	@echo "###     make clean: remove *.o, *.a, and ./obj"
+	@echo "###     make help : show help information"
+	@echo "###############################################################"
