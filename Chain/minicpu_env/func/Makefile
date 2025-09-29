@@ -20,7 +20,7 @@ ${obj_path}/test.o: test.S
 	loongarch32r-linux-gnusf-as -mabi=ilp32 test.S -o ${obj_path}/test.o
 
 ${obj_path}/test.elf: ${obj_path}/test.o
-	loongarch32r-linux-gnusf-ld ${obj_path}/test.o -T gun/bin.lds -o ${obj_path}/test.elf
+	loongarch32r-linux-gnusf-ld ${obj_path}/test.o -T bin.lds -o ${obj_path}/test.elf
 
 ${obj_path}/test.bin: ${obj_path}/test.elf
 	loongarch32r-linux-gnusf-objcopy -O binary -j .text ${obj_path}/test.elf ${obj_path}/test.bin

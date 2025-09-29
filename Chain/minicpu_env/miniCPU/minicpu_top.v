@@ -114,7 +114,7 @@ assign src2_is_imm   = inst_ld_w | inst_addi_w | inst_st_w;//�������
 assign res_from_mem  = inst_ld_w;
 assign gr_we         = inst_add_w | inst_ld_w | inst_addi_w;
 assign mem_we        = inst_st_w;
-assign src_reg_is_rd = inst_bne;  // 修正：st.w指令应该读取rk字段的寄存器作为data_wdata
+assign src_reg_is_rd = inst_bne | inst_st_w;  // 修正：st.w指令应该读取rk字段的寄存器作为data_wdata
 
 assign rf_raddr1 = rj;
 assign rf_raddr2 = src_reg_is_rd ? rd : rk;

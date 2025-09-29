@@ -18,8 +18,8 @@ module tb_top;
     // 可自定义测试输入
     reg [7:0] init_num;
     initial begin
-        switch = 8'd5;      // 选择显示r5
-        init_num = 8'd2;    // 设置init_num为2
+        switch = 8'd4;      // 选择显示r4
+        init_num = 8'd37;    // 设置init_num为2
     end
 
     soc_mini_top dut (

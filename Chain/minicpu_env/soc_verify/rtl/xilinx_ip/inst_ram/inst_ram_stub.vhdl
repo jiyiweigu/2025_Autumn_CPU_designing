@@ -2,10 +2,10 @@
 -- Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
--- Date        : Sun Sep 28 16:15:59 2025
+-- Date        : Mon Sep 29 14:49:24 2025
 -- Host        : Black running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               c:/Users/14682/Desktop/competition_and_experiment/loongson_cup/cdp_ede_local/minicpu_env/soc_verify/rtl/xilinx_ip/inst_ram/inst_ram_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub -rename_top inst_ram -prefix
+--               inst_ram_ inst_ram_stub.vhdl
 -- Design      : inst_ram
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a200tfbg676-1

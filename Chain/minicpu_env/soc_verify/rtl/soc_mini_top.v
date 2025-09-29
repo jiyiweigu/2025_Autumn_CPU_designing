@@ -136,7 +136,7 @@ minicpu_top cpu(
     .data_sram_rdata  (cpu_data_rdata)
 );
 
-assign cpu_data_rdata = (cpu_data_addr == 12'd1024)? {24'b0, ~switch[7:0]} :
+assign cpu_data_rdata = (cpu_data_addr == 12'd1024)? {24'b0, switch[7:0]} :
                         (cpu_data_addr == 12'd1040)? {24'b0, init_num[7:0]} :
                                                       32'b0;
 
@@ -151,7 +151,7 @@ inst_ram inst_ram
 );
 
 //confreg
-confreg u_confreg
+confreg u_confregs
 (
     .clk          ( cpu_clk    ),  // i, 1   
     .resetn       ( cpu_resetn ),  // i, 1    
