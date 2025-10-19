@@ -33,38 +33,57 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 `timescale 1ns / 1ps
 
 module tb_top( );
-reg resetn;
-reg clk;
+    reg resetn;
+    reg clk;
 
-//goio
-wire [15:0] led;
-reg  [7 :0] switch;
+    // gpio
+    wire [15:0] led;
+    reg  [7:0] switch;
 
-initial
-begin
-    clk = 1'b0;
-    resetn = 1'b0;
-    #2000;
-    resetn = 1'b1;
-end
-always #5 clk=~clk;
-
-initial 
-begin
-    //在这里可以自定义测试输入序列
-    switch = ~(8'h5);
+    initial
+    begin
+        $display("=== Testbench Started ===");
+        clk = 1'b0;
+        resetn = 1'b0;
+        $display("Time %t: Reset asserted", $time);
+        #20000;  // 20ns复位时间
+        resetn = 1'b1;
+        $display("Time %t: Reset released", $time);
+    end
     
-end
+    always #5 clk = ~clk;
 
+    initial 
+    begin
+        // 在这里可以自定义测试输入序列
+        switch = ~(8'h5);  // 设置开关输入
+        $display("Time %t: Switch initialized to %h", $time, switch);
+    end
 
-soc_mini_top soc_mini
-(
-       .resetn      (resetn     ), 
-       .clk         (clk        ),
+    // 监控CPU执行
+    always @(posedge clk) begin
+        if (resetn) begin
+            $display("Time %t: PC = %h, Instruction = %h", 
+                     $time, soc_mini.cpu_inst_addr, soc_mini.cpu_inst_rdata);
+        end
+    end
+
+    // 仿真结束条件
+    initial begin
+        #1000000; // 仿真运行1ms
+        $display("=== Simulation Finished ===");
+        $display("Final LED output: %h", led);
+        $finish;
+    end
+
+    soc_mini_top soc_mini
+    (
+        .resetn      (resetn     ), 
+        .clk         (clk        ),
     
         //------gpio-------
-        .led        (led        ),
-        .switch     (switch     )
+        .led         (led        ),
+        .switch      (switch     )
     );   
 
 endmodule
